@@ -72,6 +72,28 @@ export default function HomePage() {
     'My Airdrop Farming Setup'
   ];
 
+  const tickerItems = [
+    'Airdrop Alpha • Research-first approach',
+    'Wallet Security • Risk-managed execution',
+    'On-chain Proof • Transparent track record',
+    'DeFi Strategy • Sustainable farming loops'
+  ];
+
+  const testimonials = [
+    ['“Jr spots opportunities early with a disciplined method.”', 'Alpha Community Lead'],
+    ['“Great balance between aggression and wallet security.”', 'DeFi Researcher'],
+    ['“Consistent process, clear execution.”', 'Protocol Growth Contributor']
+  ];
+
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [testimonials.length]);
+
   return (
     <main className="bg-background min-h-screen overflow-x-hidden">
       <section className="relative min-h-screen flex items-center border-b border-white/10 bg-mesh overflow-hidden">
@@ -136,9 +158,17 @@ export default function HomePage() {
             Jr Noyon
           </motion.p>
 
-          <motion.div className="mt-8 flex gap-3" variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.4 }}>
-            <a href="#portfolio" className="px-5 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary hover:shadow-glow transition">View Portfolio</a>
-            <a href="#contact" className="px-5 py-3 rounded-xl border border-white/20 hover:bg-white/10 transition">Contact Me</a>
+          <motion.div className="mt-8 flex gap-3 flex-wrap" variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.4 }}>
+            <a href="#portfolio" className="px-5 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary hover:shadow-glow transition font-medium">See Winning Airdrop Portfolio</a>
+            <a href="#contact" className="px-5 py-3 rounded-xl border border-white/20 hover:bg-white/10 transition font-medium">Book Strategy Call</a>
+          </motion.div>
+
+          <motion.div className="mt-4 flex flex-wrap gap-2" variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.48 }}>
+            {['Proof-based Workflow', 'Security-first Method', 'Community Trusted'].map((b) => (
+              <span key={b} className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full border border-white/20 bg-white/5 text-textSecondary">
+                <CircleCheck className="w-3.5 h-3.5 text-accent" /> {b}
+              </span>
+            ))}
           </motion.div>
 
           <div className="grid grid-cols-3 gap-3 mt-12">
@@ -158,6 +188,20 @@ export default function HomePage() {
         <motion.a href="#about" className="absolute bottom-6 left-1/2 -translate-x-1/2 text-textSecondary" animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.8 }}>
           <ArrowDown />
         </motion.a>
+      </section>
+
+      <section className="border-y border-white/10 bg-white/[0.03] overflow-hidden">
+        <motion.div
+          className="whitespace-nowrap py-3 text-sm text-textSecondary [font-family:var(--font-mono)]"
+          animate={{ x: ['0%', '-50%'] }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
+        >
+          {[...tickerItems, ...tickerItems].map((item, i) => (
+            <span key={`${item}-${i}`} className="mx-6 inline-block">
+              {item}
+            </span>
+          ))}
+        </motion.div>
       </section>
 
       <section id="about" className="section-wrap py-20">
@@ -262,14 +306,28 @@ export default function HomePage() {
 
       <section className="section-wrap py-20">
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Testimonials</h2>
-        <div className="grid md:grid-cols-3 gap-4">
-          {[
-            ['“Jr spots opportunities early with a disciplined method.”', 'Alpha Community Lead'],
-            ['“Great balance between aggression and wallet security.”', 'DeFi Researcher'],
-            ['“Consistent process, clear execution.”', 'Protocol Growth Contributor']
-          ].map((t) => (
-            <div key={t[0]} className="glass rounded-xl p-5"><p className="text-sm text-textSecondary">{t[0]}</p><p className="mt-3 text-xs text-accent">— {t[1]}</p></div>
-          ))}
+        <div className="max-w-3xl mx-auto">
+          <motion.div
+            key={activeTestimonial}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            className="glass rounded-2xl p-6 text-center"
+          >
+            <p className="text-base md:text-lg text-textSecondary">{testimonials[activeTestimonial][0]}</p>
+            <p className="mt-4 text-sm text-accent">— {testimonials[activeTestimonial][1]}</p>
+          </motion.div>
+
+          <div className="flex justify-center gap-2 mt-4">
+            {testimonials.map((_, i) => (
+              <button
+                key={i}
+                aria-label={`Go to testimonial ${i + 1}`}
+                onClick={() => setActiveTestimonial(i)}
+                className={`h-2.5 rounded-full transition-all ${activeTestimonial === i ? 'w-8 bg-accent' : 'w-2.5 bg-white/25'}`}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
