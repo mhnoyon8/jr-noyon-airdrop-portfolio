@@ -18,7 +18,7 @@ import {
   TrendingUp,
   Wallet
 } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },
@@ -129,6 +129,7 @@ export default function HomePage() {
   const [isTestimonialPaused, setIsTestimonialPaused] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [activeSection, setActiveSection] = useState('about');
+  const [contactFeedback, setContactFeedback] = useState('');
 
   const sectionNavItems = useMemo(
     () => [
@@ -194,6 +195,25 @@ export default function HomePage() {
 
   const handleBackToTop = () => {
     window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'auto' : 'smooth' });
+  };
+
+  const handleContactSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const name = String(formData.get('name') || '').trim();
+    const email = String(formData.get('email') || '').trim();
+    const subject = String(formData.get('subject') || '').trim();
+    const message = String(formData.get('message') || '').trim();
+
+    const mailtoSubject = encodeURIComponent(`[Portfolio] ${subject}`);
+    const mailtoBody = encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+    );
+
+    window.location.href = `mailto:your@email.com?subject=${mailtoSubject}&body=${mailtoBody}`;
+    setContactFeedback('Thanks! Your email app should open with this message draft.');
   };
 
   return (
@@ -564,7 +584,7 @@ export default function HomePage() {
               </a>
             </div>
           </div>
-          <form className="glass rounded-2xl p-6 space-y-3" aria-labelledby="contact-form-title">
+          <form className="glass rounded-2xl p-6 space-y-3" aria-labelledby="contact-form-title" onSubmit={handleContactSubmit}>
             <h3 id="contact-form-title" className="sr-only">Contact form</h3>
 
             <label className="block text-sm text-textSecondary" htmlFor="contact-name">
@@ -616,7 +636,9 @@ export default function HomePage() {
               className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 outline-none focus:border-secondary"
             />
 
-            <p className="text-xs text-textSecondary" id="contact-note">All fields are required.</p>
+            <p className="text-xs text-textSecondary" id="contact-note" aria-live="polite">
+              {contactFeedback || 'All fields are required.'}
+            </p>
             <button
               type="submit"
               aria-describedby="contact-note"
