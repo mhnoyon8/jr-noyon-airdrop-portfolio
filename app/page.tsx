@@ -3,6 +3,7 @@
 import { motion, useInView, useReducedMotion, useScroll, useSpring } from 'framer-motion';
 import {
   ArrowDown,
+  ArrowUp,
   BarChart3,
   Bell,
   ChevronLeft,
@@ -126,6 +127,7 @@ export default function HomePage() {
 
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isTestimonialPaused, setIsTestimonialPaused] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   const goToPrevTestimonial = () => {
     setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
@@ -143,6 +145,17 @@ export default function HomePage() {
     }, 3500);
     return () => clearInterval(timer);
   }, [shouldReduceMotion, isTestimonialPaused, testimonials.length]);
+
+  useEffect(() => {
+    const onScroll = () => setShowBackToTop(window.scrollY > 640);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const handleBackToTop = () => {
+    window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'auto' : 'smooth' });
+  };
 
   return (
     <main className="bg-background min-h-screen overflow-x-hidden relative">
@@ -550,6 +563,18 @@ export default function HomePage() {
           </form>
         </div>
       </section>
+
+      <motion.button
+        type="button"
+        onClick={handleBackToTop}
+        aria-label="Back to top"
+        className="fixed bottom-6 right-6 z-40 h-11 w-11 rounded-full border border-white/20 bg-background/80 backdrop-blur-md text-textPrimary shadow-lg hover:shadow-glow transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80"
+        initial={false}
+        animate={{ opacity: showBackToTop ? 1 : 0, scale: showBackToTop ? 1 : 0.9, pointerEvents: showBackToTop ? 'auto' : 'none' }}
+        transition={{ duration: 0.22 }}
+      >
+        <ArrowUp className="w-5 h-5 mx-auto" />
+      </motion.button>
 
       <footer className="border-t border-white/10 py-8">
         <div className="section-wrap flex flex-col md:flex-row justify-between gap-3 text-sm text-textSecondary">
