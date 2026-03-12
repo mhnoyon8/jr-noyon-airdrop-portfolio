@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion';
 import {
   ArrowDown,
   BarChart3,
@@ -54,6 +54,12 @@ function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
 
 export default function HomePage() {
   const shouldReduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const progressScaleX = useSpring(scrollYProgress, {
+    stiffness: 140,
+    damping: 28,
+    mass: 0.2
+  });
 
   const particles = useMemo(
     () => Array.from({ length: 20 }, (_, i) => ({ id: i, left: `${(i * 7) % 100}%`, delay: i * 0.25 })),
@@ -109,6 +115,12 @@ export default function HomePage() {
 
   return (
     <main className="bg-background min-h-screen overflow-x-hidden">
+      <motion.div
+        aria-hidden="true"
+        className="fixed top-0 left-0 right-0 h-1 z-50 origin-left bg-gradient-to-r from-primary via-secondary to-accent"
+        style={{ scaleX: progressScaleX }}
+      />
+
       <section className="relative min-h-screen flex items-center border-b border-white/10 bg-mesh overflow-hidden">
         <motion.div
           className="absolute inset-0 bg-gradient-to-b from-primary/20 via-background/70 to-background"
