@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import {
   ArrowDown,
   BarChart3,
@@ -125,9 +124,9 @@ export default function HomePage() {
         ))}
 
         <div className="section-wrap relative z-10 py-16">
-          <motion.div variants={fadeUp} initial="hidden" animate="show" className="inline-flex items-center gap-3 mb-5 glass rounded-full px-3 py-2">
-            <Image src="/aether-logo.jpg" alt="Aether logo" width={34} height={34} className="rounded-full object-cover border border-white/20" />
-            <span className="text-xs text-textSecondary">Powered by Aether</span>
+          <motion.div variants={fadeUp} initial="hidden" animate="show" className="inline-flex items-center gap-3 mb-5 glass rounded-full px-4 py-2.5 border border-secondary/40 shadow-glow">
+            <img src="/aether-logo.jpg" alt="Aether logo" width="44" height="44" className="rounded-full object-cover border-2 border-accent/70" />
+            <span className="text-sm text-textPrimary font-medium">Powered by Aether</span>
           </motion.div>
           <motion.p variants={fadeUp} initial="hidden" animate="show" className="text-accent font-mono mb-4">
             Crypto Airdrop Portfolio
