@@ -54,6 +54,24 @@ jr-noyon-airdrop-portfolio/
 - Add custom domain (optional): Project Settings → Domains.
 - Re-deploy on each push (enabled by default).
 
+## Website Preview
+
+### Hero Preview
+![Hero Preview](./public/previews/hero-preview.png)
+
+### Bottom Section Preview
+![Bottom Preview](./public/previews/bottom-preview.png)
+
+### Live Snapshot
+![Live Preview](./public/previews/live-preview.png)
+
+## Use Cases
+1. **Personal Crypto Portfolio** — show track record, strategy, and active hunts.
+2. **Airdrop Consulting Landing Page** — convert visitors into consultation leads.
+3. **Community Credibility Page** — share proof-of-work with transparent metrics.
+4. **Service Showcase** — present wallet setup, security advisory, and strategy services.
+5. **Content Hub Starter** — publish airdrop insights and educational posts.
+
 ## Notes
 - Replace placeholders (contact links, stats, articles, testimonials).
 - Keep crypto-risk disclaimer in footer.
