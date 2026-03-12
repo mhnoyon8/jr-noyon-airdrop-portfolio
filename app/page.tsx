@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   ArrowDown,
   BarChart3,
@@ -44,6 +44,8 @@ function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
 }
 
 export default function HomePage() {
+  const shouldReduceMotion = useReducedMotion();
+
   const particles = useMemo(
     () => Array.from({ length: 20 }, (_, i) => ({ id: i, left: `${(i * 7) % 100}%`, delay: i * 0.25 })),
     []
@@ -88,32 +90,34 @@ export default function HomePage() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   useEffect(() => {
+    if (shouldReduceMotion) return;
+
     const timer = setInterval(() => {
       setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
     }, 3500);
     return () => clearInterval(timer);
-  }, [testimonials.length]);
+  }, [shouldReduceMotion, testimonials.length]);
 
   return (
     <main className="bg-background min-h-screen overflow-x-hidden">
       <section className="relative min-h-screen flex items-center border-b border-white/10 bg-mesh overflow-hidden">
         <motion.div
           className="absolute inset-0 bg-gradient-to-b from-primary/20 via-background/70 to-background"
-          animate={{ opacity: [0.75, 1, 0.75] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          animate={shouldReduceMotion ? { opacity: 0.9 } : { opacity: [0.75, 1, 0.75] }}
+          transition={shouldReduceMotion ? { duration: 0 } : { duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
           className="absolute -top-24 -left-20 w-72 h-72 rounded-full bg-primary/20 blur-3xl"
-          animate={{ x: [0, 30, 0], y: [0, 20, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          animate={shouldReduceMotion ? { x: 0, y: 0 } : { x: [0, 30, 0], y: [0, 20, 0] }}
+          transition={shouldReduceMotion ? { duration: 0 } : { duration: 10, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
           className="absolute -bottom-24 -right-20 w-80 h-80 rounded-full bg-secondary/20 blur-3xl"
-          animate={{ x: [0, -35, 0], y: [0, -20, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+          animate={shouldReduceMotion ? { x: 0, y: 0 } : { x: [0, -35, 0], y: [0, -20, 0] }}
+          transition={shouldReduceMotion ? { duration: 0 } : { duration: 12, repeat: Infinity, ease: 'easeInOut' }}
         />
 
-        {particles.map((p) => (
+        {!shouldReduceMotion && particles.map((p) => (
           <motion.div
             key={p.id}
             className="absolute w-2 h-2 rounded-full bg-accent/70"
@@ -189,7 +193,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <motion.a href="#about" className="absolute bottom-6 left-1/2 -translate-x-1/2 text-textSecondary" animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.8 }}>
+        <motion.a href="#about" className="absolute bottom-6 left-1/2 -translate-x-1/2 text-textSecondary" animate={shouldReduceMotion ? { y: 0 } : { y: [0, 8, 0] }} transition={shouldReduceMotion ? { duration: 0 } : { repeat: Infinity, duration: 1.8 }}>
           <ArrowDown />
         </motion.a>
       </section>
@@ -197,8 +201,8 @@ export default function HomePage() {
       <section className="border-y border-white/10 bg-white/[0.03] overflow-hidden">
         <motion.div
           className="whitespace-nowrap py-3 text-sm text-textSecondary [font-family:var(--font-mono)]"
-          animate={{ x: ['0%', '-50%'] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
+          animate={shouldReduceMotion ? { x: 0 } : { x: ['0%', '-50%'] }}
+          transition={shouldReduceMotion ? { duration: 0 } : { duration: 18, repeat: Infinity, ease: 'linear' }}
         >
           {[...tickerItems, ...tickerItems].map((item, i) => (
             <span key={`${item}-${i}`} className="mx-6 inline-block">
@@ -238,7 +242,7 @@ export default function HomePage() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              whileHover={{ y: -8, rotateX: 2, rotateY: -2, scale: 1.01 }}
+              whileHover={shouldReduceMotion ? undefined : { y: -8, rotateX: 2, rotateY: -2, scale: 1.01 }}
               transition={{ type: 'spring', stiffness: 220, damping: 18 }}
               className="glass rounded-xl p-5 hover:shadow-glow transition-transform duration-300"
             >
