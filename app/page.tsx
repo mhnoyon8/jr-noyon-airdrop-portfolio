@@ -16,13 +16,22 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0 }
+  hidden: { opacity: 0, y: 18 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] }
+  }
 };
 
 const sectionReveal = {
-  hidden: { opacity: 0, y: 30, filter: 'blur(6px)' },
-  show: { opacity: 1, y: 0, filter: 'blur(0px)' }
+  hidden: { opacity: 0, y: 24, filter: 'blur(6px)' },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] }
+  }
 };
 
 function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
@@ -167,8 +176,8 @@ export default function HomePage() {
           </motion.p>
 
           <motion.div className="mt-8 flex gap-3 flex-wrap" variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.4 }}>
-            <a href="#portfolio" className="px-5 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary hover:shadow-glow transition font-medium">See Winning Airdrop Portfolio</a>
-            <a href="#contact" className="px-5 py-3 rounded-xl border border-white/20 hover:bg-white/10 transition font-medium">Book Strategy Call</a>
+            <a href="#portfolio" className="px-5 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary hover:shadow-glow hover:-translate-y-0.5 transition duration-300 font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80">See Winning Airdrop Portfolio</a>
+            <a href="#contact" className="px-5 py-3 rounded-xl border border-white/20 hover:bg-white/10 hover:-translate-y-0.5 transition duration-300 font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80">Book Strategy Call</a>
           </motion.div>
 
           <motion.div className="mt-4 flex flex-wrap gap-2" variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.48 }}>
@@ -202,7 +211,7 @@ export default function HomePage() {
         <motion.div
           className="whitespace-nowrap py-3 text-sm text-textSecondary [font-family:var(--font-mono)]"
           animate={shouldReduceMotion ? { x: 0 } : { x: ['0%', '-50%'] }}
-          transition={shouldReduceMotion ? { duration: 0 } : { duration: 18, repeat: Infinity, ease: 'linear' }}
+          transition={shouldReduceMotion ? { duration: 0 } : { duration: 24, repeat: Infinity, ease: 'linear' }}
         >
           {[...tickerItems, ...tickerItems].map((item, i) => (
             <span key={`${item}-${i}`} className="mx-6 inline-block">
@@ -242,8 +251,8 @@ export default function HomePage() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              whileHover={shouldReduceMotion ? undefined : { y: -8, rotateX: 2, rotateY: -2, scale: 1.01 }}
-              transition={{ type: 'spring', stiffness: 220, damping: 18 }}
+              whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.015 }}
+              transition={{ type: 'spring', stiffness: 180, damping: 20 }}
               className="glass rounded-xl p-5 hover:shadow-glow transition-transform duration-300"
             >
               <p className="font-semibold">{p[0]}</p>
@@ -319,7 +328,7 @@ export default function HomePage() {
             key={activeTestimonial}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="glass rounded-2xl p-6 text-center"
           >
             <p className="text-base md:text-lg text-textSecondary">{testimonials[activeTestimonial][0]}</p>
