@@ -103,18 +103,25 @@ export default function HomePage() {
   ];
 
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [isTestimonialPaused, setIsTestimonialPaused] = useState(false);
 
   useEffect(() => {
-    if (shouldReduceMotion) return;
+    if (shouldReduceMotion || isTestimonialPaused) return;
 
     const timer = setInterval(() => {
       setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
     }, 3500);
     return () => clearInterval(timer);
-  }, [shouldReduceMotion, testimonials.length]);
+  }, [shouldReduceMotion, isTestimonialPaused, testimonials.length]);
 
   return (
-    <main className="bg-background min-h-screen overflow-x-hidden">
+    <main className="bg-background min-h-screen overflow-x-hidden relative">
+      <a
+        href="#about"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-background focus:border focus:border-accent focus:text-textPrimary"
+      >
+        Skip to main content
+      </a>
       <motion.div
         aria-hidden="true"
         className="fixed top-0 left-0 right-0 h-1 z-50 origin-left bg-gradient-to-r from-primary via-secondary to-accent"
@@ -335,13 +342,20 @@ export default function HomePage() {
 
       <section className="section-wrap py-20">
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Testimonials</h2>
-        <div className="max-w-3xl mx-auto">
+        <div
+          className="max-w-3xl mx-auto"
+          onMouseEnter={() => setIsTestimonialPaused(true)}
+          onMouseLeave={() => setIsTestimonialPaused(false)}
+          onFocus={() => setIsTestimonialPaused(true)}
+          onBlur={() => setIsTestimonialPaused(false)}
+        >
           <motion.div
             key={activeTestimonial}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="glass rounded-2xl p-6 text-center"
+            aria-live="polite"
           >
             <p className="text-base md:text-lg text-textSecondary">{testimonials[activeTestimonial][0]}</p>
             <p className="mt-4 text-sm text-accent">— {testimonials[activeTestimonial][1]}</p>
@@ -351,9 +365,11 @@ export default function HomePage() {
             {testimonials.map((_, i) => (
               <button
                 key={i}
+                type="button"
                 aria-label={`Go to testimonial ${i + 1}`}
+                aria-pressed={activeTestimonial === i}
                 onClick={() => setActiveTestimonial(i)}
-                className={`h-2.5 rounded-full transition-all ${activeTestimonial === i ? 'w-8 bg-accent' : 'w-2.5 bg-white/25'}`}
+                className={`h-2.5 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 ${activeTestimonial === i ? 'w-8 bg-accent' : 'w-2.5 bg-white/25'}`}
               />
             ))}
           </div>
