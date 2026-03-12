@@ -57,8 +57,20 @@ jr-noyon-airdrop-portfolio/
 │   ├── globals.css
 │   ├── layout.tsx
 │   └── page.tsx
+├── data/
+│   └── content.ts
+├── components/
+│   ├── layout/
+│   ├── sections/
+│   └── ui/
+├── lib/
+│   ├── constants/
+│   └── utils/
 ├── public/
 │   ├── favicon.svg
+│   ├── images/
+│   ├── icons/
+│   ├── logos/
 │   └── previews/
 │       ├── hero-preview.png
 │       ├── bottom-preview.png
