@@ -248,12 +248,66 @@ export default function HomePage() {
               <p><Coins className="inline w-4 h-4 mr-2" />Discord: yourdiscord#0001</p>
             </div>
           </div>
-          <form className="glass rounded-2xl p-6 space-y-3">
-            {['Name', 'Email', 'Subject'].map((f) => (
-              <input key={f} placeholder={f} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 outline-none focus:border-secondary" />
-            ))}
-            <textarea placeholder="Message" rows={4} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 outline-none focus:border-secondary" />
-            <button className="w-full py-2 rounded-lg bg-gradient-to-r from-primary to-secondary hover:shadow-glow transition">Send Message</button>
+          <form className="glass rounded-2xl p-6 space-y-3" aria-labelledby="contact-form-title">
+            <h3 id="contact-form-title" className="sr-only">Contact form</h3>
+
+            <label className="block text-sm text-textSecondary" htmlFor="contact-name">
+              Name
+            </label>
+            <input
+              id="contact-name"
+              name="name"
+              autoComplete="name"
+              required
+              placeholder="Your name"
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 outline-none focus:border-secondary"
+            />
+
+            <label className="block text-sm text-textSecondary" htmlFor="contact-email">
+              Email
+            </label>
+            <input
+              id="contact-email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              placeholder="you@example.com"
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 outline-none focus:border-secondary"
+            />
+
+            <label className="block text-sm text-textSecondary" htmlFor="contact-subject">
+              Subject
+            </label>
+            <input
+              id="contact-subject"
+              name="subject"
+              autoComplete="off"
+              required
+              placeholder="What is this about?"
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 outline-none focus:border-secondary"
+            />
+
+            <label className="block text-sm text-textSecondary" htmlFor="contact-message">
+              Message
+            </label>
+            <textarea
+              id="contact-message"
+              name="message"
+              rows={4}
+              required
+              placeholder="Write your message"
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 outline-none focus:border-secondary"
+            />
+
+            <p className="text-xs text-textSecondary" id="contact-note">All fields are required.</p>
+            <button
+              type="submit"
+              aria-describedby="contact-note"
+              className="w-full py-2 rounded-lg bg-gradient-to-r from-primary to-secondary hover:shadow-glow transition"
+            >
+              Send Message
+            </button>
           </form>
         </div>
       </section>
