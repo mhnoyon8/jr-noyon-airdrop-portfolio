@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion';
+import { motion, useInView, useReducedMotion, useScroll, useSpring } from 'framer-motion';
 import {
   ArrowDown,
   BarChart3,
@@ -17,7 +17,7 @@ import {
   TrendingUp,
   Wallet
 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },
@@ -40,7 +40,18 @@ const sectionReveal = {
 
 function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
   const [v, setV] = useState(0);
+  const shouldReduceMotion = useReducedMotion();
+  const countRef = useRef<HTMLSpanElement | null>(null);
+  const isInView = useInView(countRef, { once: true, margin: '-10% 0px' });
+
   useEffect(() => {
+    if (shouldReduceMotion) {
+      setV(to);
+      return;
+    }
+
+    if (!isInView) return;
+
     const t = setInterval(() => {
       setV((prev) => {
         const next = prev + Math.ceil(to / 30);
@@ -51,9 +62,16 @@ function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
         return next;
       });
     }, 25);
+
     return () => clearInterval(t);
-  }, [to]);
-  return <span className="font-mono">{v}{suffix}</span>;
+  }, [to, shouldReduceMotion, isInView]);
+
+  return (
+    <span ref={countRef} className="font-mono" aria-live="off">
+      {v}
+      {suffix}
+    </span>
+  );
 }
 
 export default function HomePage() {
