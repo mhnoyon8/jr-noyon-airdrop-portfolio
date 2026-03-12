@@ -5,10 +5,14 @@ import {
   ArrowDown,
   BarChart3,
   Bell,
+  ChevronLeft,
+  ChevronRight,
   CircleCheck,
   Coins,
   Mail,
   MessageCircle,
+  Pause,
+  Play,
   Shield,
   TrendingUp,
   Wallet
@@ -104,6 +108,14 @@ export default function HomePage() {
 
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isTestimonialPaused, setIsTestimonialPaused] = useState(false);
+
+  const goToPrevTestimonial = () => {
+    setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
+  const goToNextTestimonial = () => {
+    setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
 
   useEffect(() => {
     if (shouldReduceMotion || isTestimonialPaused) return;
@@ -344,10 +356,16 @@ export default function HomePage() {
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Testimonials</h2>
         <div
           className="max-w-3xl mx-auto"
+          tabIndex={0}
+          aria-label="Testimonials carousel"
           onMouseEnter={() => setIsTestimonialPaused(true)}
           onMouseLeave={() => setIsTestimonialPaused(false)}
           onFocus={() => setIsTestimonialPaused(true)}
           onBlur={() => setIsTestimonialPaused(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'ArrowLeft') goToPrevTestimonial();
+            if (e.key === 'ArrowRight') goToNextTestimonial();
+          }}
         >
           <motion.div
             key={activeTestimonial}
@@ -360,6 +378,36 @@ export default function HomePage() {
             <p className="text-base md:text-lg text-textSecondary">{testimonials[activeTestimonial][0]}</p>
             <p className="mt-4 text-sm text-accent">— {testimonials[activeTestimonial][1]}</p>
           </motion.div>
+
+          <div className="mt-4 flex items-center justify-center gap-2">
+            <button
+              type="button"
+              onClick={goToPrevTestimonial}
+              aria-label="Previous testimonial"
+              className="h-9 w-9 inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 hover:bg-white/10 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsTestimonialPaused((prev) => !prev)}
+              aria-label={isTestimonialPaused ? 'Resume autoplay' : 'Pause autoplay'}
+              aria-pressed={isTestimonialPaused}
+              className="h-9 w-9 inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 hover:bg-white/10 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80"
+            >
+              {isTestimonialPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+            </button>
+
+            <button
+              type="button"
+              onClick={goToNextTestimonial}
+              aria-label="Next testimonial"
+              className="h-9 w-9 inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 hover:bg-white/10 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
 
           <div className="flex justify-center gap-2 mt-4">
             {testimonials.map((_, i) => (
