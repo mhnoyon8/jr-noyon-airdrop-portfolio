@@ -429,10 +429,44 @@ export default function HomePage() {
           <div className="glass rounded-2xl p-6">
             <h2 className="text-3xl font-bold [font-family:var(--font-space)]">Contact</h2>
             <div className="mt-4 space-y-2 text-textSecondary text-sm">
-              <p><Mail className="inline w-4 h-4 mr-2" />Email: your@email.com</p>
-              <p><MessageCircle className="inline w-4 h-4 mr-2" />Telegram: @yourhandle</p>
-              <p><Bell className="inline w-4 h-4 mr-2" />Twitter/X: @yourhandle</p>
-              <p><Coins className="inline w-4 h-4 mr-2" />Discord: yourdiscord#0001</p>
+              <a
+                href="mailto:your@email.com"
+                className="group inline-flex items-center gap-2 rounded-md px-2 py-1 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80"
+                aria-label="Send email to Jr Noyon"
+              >
+                <Mail className="w-4 h-4" />
+                <span>Email: <span className="group-hover:text-accent transition">your@email.com</span></span>
+              </a>
+              <a
+                href="https://t.me/yourhandle"
+                target="_blank"
+                rel="noreferrer"
+                className="group inline-flex items-center gap-2 rounded-md px-2 py-1 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80"
+                aria-label="Open Telegram profile"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Telegram: <span className="group-hover:text-accent transition">@yourhandle</span></span>
+              </a>
+              <a
+                href="https://x.com/yourhandle"
+                target="_blank"
+                rel="noreferrer"
+                className="group inline-flex items-center gap-2 rounded-md px-2 py-1 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80"
+                aria-label="Open Twitter/X profile"
+              >
+                <Bell className="w-4 h-4" />
+                <span>Twitter/X: <span className="group-hover:text-accent transition">@yourhandle</span></span>
+              </a>
+              <a
+                href="https://discord.com"
+                target="_blank"
+                rel="noreferrer"
+                className="group inline-flex items-center gap-2 rounded-md px-2 py-1 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80"
+                aria-label="Open Discord"
+              >
+                <Coins className="w-4 h-4" />
+                <span>Discord: <span className="group-hover:text-accent transition">yourdiscord#0001</span></span>
+              </a>
             </div>
           </div>
           <form className="glass rounded-2xl p-6 space-y-3" aria-labelledby="contact-form-title">
