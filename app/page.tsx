@@ -20,6 +20,11 @@ const fadeUp = {
   show: { opacity: 1, y: 0 }
 };
 
+const sectionReveal = {
+  hidden: { opacity: 0, y: 30, filter: 'blur(6px)' },
+  show: { opacity: 1, y: 0, filter: 'blur(0px)' }
+};
+
 function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
   const [v, setV] = useState(0);
   useEffect(() => {
@@ -69,8 +74,22 @@ export default function HomePage() {
 
   return (
     <main className="bg-background min-h-screen overflow-x-hidden">
-      <section className="relative min-h-screen flex items-center border-b border-white/10 bg-mesh">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/20 via-background/70 to-background" />
+      <section className="relative min-h-screen flex items-center border-b border-white/10 bg-mesh overflow-hidden">
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-b from-primary/20 via-background/70 to-background"
+          animate={{ opacity: [0.75, 1, 0.75] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute -top-24 -left-20 w-72 h-72 rounded-full bg-primary/20 blur-3xl"
+          animate={{ x: [0, 30, 0], y: [0, 20, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute -bottom-24 -right-20 w-80 h-80 rounded-full bg-secondary/20 blur-3xl"
+          animate={{ x: [0, -35, 0], y: [0, -20, 0] }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+        />
 
         {particles.map((p) => (
           <motion.div
@@ -165,7 +184,16 @@ export default function HomePage() {
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Track Record</h2>
         <div className="grid md:grid-cols-3 gap-4">
           {portfolio.map((p) => (
-            <motion.div key={p[0]} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className="glass rounded-xl p-5 hover:-translate-y-1 hover:shadow-glow transition">
+            <motion.div
+              key={p[0]}
+              variants={sectionReveal}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+              whileHover={{ y: -8, rotateX: 2, rotateY: -2, scale: 1.01 }}
+              transition={{ type: 'spring', stiffness: 220, damping: 18 }}
+              className="glass rounded-xl p-5 hover:shadow-glow transition-transform duration-300"
+            >
               <p className="font-semibold">{p[0]}</p>
               <p className="text-sm text-textSecondary">{p[1]} • {p[2]}</p>
               <p className="text-sm mt-2 text-textSecondary">{p[3]}</p>
@@ -177,11 +205,19 @@ export default function HomePage() {
       <section className="section-wrap py-20">
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Active Hunts</h2>
         <div className="space-y-4">
-          {activeHunts.map((h) => (
-            <div key={h[0]} className="glass rounded-xl p-4">
+          {activeHunts.map((h, idx) => (
+            <motion.div key={h[0]} className="glass rounded-xl p-4" variants={sectionReveal} initial="hidden" whileInView="show" viewport={{ once: true }} transition={{ delay: idx * 0.08 }}>
               <div className="flex justify-between text-sm"><span>{h[0]}</span><span className="text-accent">{h[2]}</span></div>
-              <div className="mt-2 w-full bg-white/10 rounded-full h-2 overflow-hidden"><div className="h-2 bg-gradient-to-r from-primary to-secondary" style={{ width: `${h[1]}%` }} /></div>
-            </div>
+              <div className="mt-2 w-full bg-white/10 rounded-full h-2 overflow-hidden">
+                <motion.div
+                  className="h-2 bg-gradient-to-r from-primary to-secondary"
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${h[1]}%` }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.1, ease: 'easeOut' }}
+                />
+              </div>
+            </motion.div>
           ))}
         </div>
         <p className="text-xs text-textSecondary mt-3">Last updated: just now</p>
