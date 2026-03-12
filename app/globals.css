@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  background: #0F172A;
+  scroll-behavior: smooth;
+}
+
+.glass {
+  @apply bg-white/5 border border-white/10 backdrop-blur-xl;
+}
+
+.section-wrap {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
