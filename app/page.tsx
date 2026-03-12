@@ -128,6 +128,18 @@ export default function HomePage() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isTestimonialPaused, setIsTestimonialPaused] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [activeSection, setActiveSection] = useState('about');
+
+  const sectionNavItems = useMemo(
+    () => [
+      ['about', 'About'],
+      ['portfolio', 'Portfolio'],
+      ['hunts', 'Hunts'],
+      ['services', 'Services'],
+      ['contact', 'Contact']
+    ] as const,
+    []
+  );
 
   const goToPrevTestimonial = () => {
     setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
@@ -152,6 +164,33 @@ export default function HomePage() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    const sectionElements = sectionNavItems
+      .map(([id]) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
+
+    if (!sectionElements.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (visible?.target?.id) {
+          setActiveSection(visible.target.id);
+        }
+      },
+      {
+        rootMargin: '-35% 0px -50% 0px',
+        threshold: [0.2, 0.45, 0.65]
+      }
+    );
+
+    sectionElements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [sectionNavItems]);
 
   const handleBackToTop = () => {
     window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'auto' : 'smooth' });
@@ -283,6 +322,31 @@ export default function HomePage() {
         </motion.div>
       </section>
 
+      <nav
+        aria-label="Section navigation"
+        className="sticky top-2 z-30 section-wrap py-4"
+      >
+        <div className="glass rounded-full border border-white/15 p-1.5 flex flex-wrap gap-1.5 w-fit mx-auto">
+          {sectionNavItems.map(([id, label]) => {
+            const isActive = activeSection === id;
+            return (
+              <a
+                key={id}
+                href={`#${id}`}
+                aria-current={isActive ? 'true' : undefined}
+                className={`px-3 py-1.5 rounded-full text-xs md:text-sm transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 ${
+                  isActive
+                    ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-glow'
+                    : 'text-textSecondary hover:text-textPrimary hover:bg-white/10'
+                }`}
+              >
+                {label}
+              </a>
+            );
+          })}
+        </div>
+      </nav>
+
       <section id="about" className="section-wrap py-20">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}>
@@ -325,7 +389,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section-wrap py-20">
+      <section id="hunts" className="section-wrap py-20">
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Active Hunts</h2>
         <div className="space-y-4">
           {activeHunts.map((h, idx) => (
@@ -362,7 +426,7 @@ export default function HomePage() {
         <p className="text-textSecondary text-sm">Tools: Dune, DeBank, DefiLlama, Discord alpha channels, Twitter/X monitoring, wallet segmentation.</p>
       </section>
 
-      <section className="section-wrap py-20">
+      <section id="services" className="section-wrap py-20">
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Services</h2>
         <div className="grid md:grid-cols-3 gap-4">
           {['Airdrop Hunting Consultation', 'Wallet Setup & Security', 'Strategy Planning'].map((s) => (
