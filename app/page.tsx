@@ -381,7 +381,12 @@ export default function HomePage() {
 
       <section id="about" className={deferredSectionClass}>
         <div className="grid md:grid-cols-2 gap-8 items-center">
-          <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}>
+          <motion.div
+            variants={fadeUp}
+            initial={shouldLimitMotion ? false : 'hidden'}
+            whileInView={shouldLimitMotion ? undefined : 'show'}
+            viewport={{ once: true }}
+          >
             <h2 className="text-3xl font-bold [font-family:var(--font-space)]">Who Am I?</h2>
             <p className="mt-4 text-textSecondary">
               I’m Jr Noyon — a crypto airdrop hunter focused on high-signal opportunities. I use a structured, risk-managed strategy across testnets, mainnets, and ecosystem engagement.
@@ -393,7 +398,13 @@ export default function HomePage() {
               <div className="glass rounded-xl p-4"><p className="text-xl"><CountUp to={78} suffix="%" /></p><p className="text-xs text-textSecondary">Hit Rate</p></div>
             </div>
           </motion.div>
-          <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className="glass rounded-2xl p-8 h-80 flex items-center justify-center">
+          <motion.div
+            variants={fadeUp}
+            initial={shouldLimitMotion ? false : 'hidden'}
+            whileInView={shouldLimitMotion ? undefined : 'show'}
+            viewport={{ once: true }}
+            className="glass rounded-2xl p-8 h-80 flex items-center justify-center"
+          >
             <div className="w-44 h-44 rounded-full bg-gradient-to-br from-primary via-secondary to-accent blur-[1px]" />
           </motion.div>
         </div>
@@ -406,8 +417,8 @@ export default function HomePage() {
             <motion.div
               key={p[0]}
               variants={sectionReveal}
-              initial="hidden"
-              whileInView="show"
+              initial={shouldLimitMotion ? false : 'hidden'}
+              whileInView={shouldLimitMotion ? undefined : 'show'}
               viewport={{ once: true }}
               whileHover={shouldLimitMotion ? undefined : { y: -6, scale: 1.015 }}
               transition={{ type: 'spring', stiffness: 180, damping: 20 }}
@@ -425,15 +436,24 @@ export default function HomePage() {
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Active Hunts</h2>
         <div className="space-y-4">
           {activeHunts.map((h, idx) => (
-            <motion.div key={h[0]} className="glass rounded-xl p-4" variants={sectionReveal} initial="hidden" whileInView="show" viewport={{ once: true }} transition={{ delay: idx * 0.08 }}>
+            <motion.div
+              key={h[0]}
+              className="glass rounded-xl p-4"
+              variants={sectionReveal}
+              initial={shouldLimitMotion ? false : 'hidden'}
+              whileInView={shouldLimitMotion ? undefined : 'show'}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.08 }}
+            >
               <div className="flex justify-between text-sm"><span>{h[0]}</span><span className="text-accent">{h[2]}</span></div>
               <div className="mt-2 w-full bg-white/10 rounded-full h-2 overflow-hidden">
                 <motion.div
                   className="h-2 bg-gradient-to-r from-primary to-secondary"
-                  initial={{ width: 0 }}
-                  whileInView={{ width: `${h[1]}%` }}
+                  initial={shouldLimitMotion ? false : { width: 0 }}
+                  whileInView={shouldLimitMotion ? undefined : { width: `${h[1]}%` }}
+                  animate={shouldLimitMotion ? { width: `${h[1]}%` } : undefined}
                   viewport={{ once: true }}
-                  transition={{ duration: 1.1, ease: 'easeOut' }}
+                  transition={{ duration: shouldLimitMotion ? 0 : 1.1, ease: 'easeOut' }}
                 />
               </div>
             </motion.div>
@@ -510,9 +530,9 @@ export default function HomePage() {
             role="group"
             aria-roledescription="slide"
             aria-label={`${activeTestimonial + 1} of ${testimonials.length}`}
-            initial={{ opacity: 0, y: 12 }}
+            initial={shouldLimitMotion ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: shouldLimitMotion ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="glass rounded-2xl p-6 text-center"
           >
             <p className="text-base md:text-lg text-textSecondary">{testimonials[activeTestimonial][0]}</p>
