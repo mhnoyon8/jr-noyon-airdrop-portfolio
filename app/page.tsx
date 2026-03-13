@@ -333,7 +333,7 @@ export default function HomePage() {
         </div>
       </nav>
 
-      <section id="about" className="section-wrap py-20">
+      <section id="about" className="section-wrap py-20 scroll-mt-24">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}>
             <h2 className="text-3xl font-bold [font-family:var(--font-space)]">Who Am I?</h2>
@@ -353,7 +353,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="portfolio" className="section-wrap py-20">
+      <section id="portfolio" className="section-wrap py-20 scroll-mt-24">
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Track Record</h2>
         <div className="grid md:grid-cols-3 gap-4">
           {portfolio.map((p) => (
@@ -375,7 +375,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="hunts" className="section-wrap py-20">
+      <section id="hunts" className="section-wrap py-20 scroll-mt-24">
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Active Hunts</h2>
         <div className="space-y-4">
           {activeHunts.map((h, idx) => (
@@ -412,7 +412,7 @@ export default function HomePage() {
         <p className="text-textSecondary text-sm">Tools: Dune, DeBank, DefiLlama, Discord alpha channels, Twitter/X monitoring, wallet segmentation.</p>
       </section>
 
-      <section id="services" className="section-wrap py-20">
+      <section id="services" className="section-wrap py-20 scroll-mt-24">
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Services</h2>
         <div className="grid md:grid-cols-3 gap-4">
           {['Airdrop Hunting Consultation', 'Wallet Setup & Security', 'Strategy Planning'].map((s) => (
@@ -505,7 +505,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="contact" className="section-wrap py-20">
+      <section id="contact" className="section-wrap py-20 scroll-mt-24">
         <div className="grid md:grid-cols-2 gap-6">
           <div className="glass rounded-2xl p-6">
             <h2 className="text-3xl font-bold [font-family:var(--font-space)]">Contact</h2>
