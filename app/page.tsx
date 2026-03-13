@@ -103,6 +103,8 @@ export default function HomePage() {
   const shouldLimitMotion = shouldReduceMotion || prefersReducedData;
   const shouldAnimateHero = !shouldLimitMotion && isPageVisible;
   const testimonialsRef = useRef<HTMLDivElement | null>(null);
+  const sectionNavRef = useRef<HTMLDivElement | null>(null);
+  const sectionNavItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const isTestimonialsInView = useInView(testimonialsRef, { amount: 0.5 });
 
   const deferredSectionClass = 'section-wrap py-20 scroll-mt-24 [content-visibility:auto] [contain-intrinsic-size:1px_760px]';
@@ -197,6 +199,17 @@ export default function HomePage() {
     sectionElements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [sectionNavItems]);
+
+  useEffect(() => {
+    const activeItem = sectionNavItemRefs.current[activeSection];
+    if (!activeItem) return;
+
+    activeItem.scrollIntoView({
+      behavior: shouldLimitMotion ? 'auto' : 'smooth',
+      inline: 'center',
+      block: 'nearest'
+    });
+  }, [activeSection, shouldLimitMotion]);
 
   const handleBackToTop = () => {
     window.scrollTo({ top: 0, behavior: shouldLimitMotion ? 'auto' : 'smooth' });
@@ -358,15 +371,21 @@ export default function HomePage() {
         aria-label="Section navigation"
         className="sticky top-2 z-30 section-wrap py-4"
       >
-        <div className="glass rounded-full border border-white/15 p-1.5 flex flex-wrap gap-1.5 w-fit mx-auto">
+        <div
+          ref={sectionNavRef}
+          className="glass rounded-full border border-white/15 p-1.5 flex gap-1.5 w-fit max-w-full mx-auto overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        >
           {sectionNavItems.map(([id, label]) => {
             const isActive = activeSection === id;
             return (
               <a
                 key={id}
+                ref={(el) => {
+                  sectionNavItemRefs.current[id] = el;
+                }}
                 href={`#${id}`}
                 aria-current={isActive ? 'true' : undefined}
-                className={`px-3 py-1.5 rounded-full text-xs md:text-sm transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 ${
+                className={`shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full text-xs md:text-sm transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 ${
                   isActive
                     ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-glow'
                     : 'text-textSecondary hover:text-textPrimary hover:bg-white/10'
