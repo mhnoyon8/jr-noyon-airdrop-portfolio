@@ -98,6 +98,7 @@ export default function HomePage() {
   const [contactFeedback, setContactFeedback] = useState('');
   const [showAmbientParticles, setShowAmbientParticles] = useState(false);
   const [isPageVisible, setIsPageVisible] = useState(true);
+  const shouldAnimateHero = !shouldReduceMotion && isPageVisible;
   const testimonialsRef = useRef<HTMLDivElement | null>(null);
   const isTestimonialsInView = useInView(testimonialsRef, { amount: 0.5 });
 
@@ -220,21 +221,21 @@ export default function HomePage() {
       <section className="relative min-h-screen flex items-center border-b border-white/10 bg-mesh overflow-hidden">
         <motion.div
           className="absolute inset-0 bg-gradient-to-b from-primary/20 via-background/70 to-background"
-          animate={shouldReduceMotion ? { opacity: 0.9 } : { opacity: [0.75, 1, 0.75] }}
-          transition={shouldReduceMotion ? { duration: 0 } : { duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          animate={shouldAnimateHero ? { opacity: [0.75, 1, 0.75] } : { opacity: 0.9 }}
+          transition={shouldAnimateHero ? { duration: 8, repeat: Infinity, ease: 'easeInOut' } : { duration: 0 }}
         />
         <motion.div
           className="absolute -top-24 -left-20 w-72 h-72 rounded-full bg-primary/20 blur-3xl"
-          animate={shouldReduceMotion ? { x: 0, y: 0 } : { x: [0, 30, 0], y: [0, 20, 0] }}
-          transition={shouldReduceMotion ? { duration: 0 } : { duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          animate={shouldAnimateHero ? { x: [0, 30, 0], y: [0, 20, 0] } : { x: 0, y: 0 }}
+          transition={shouldAnimateHero ? { duration: 10, repeat: Infinity, ease: 'easeInOut' } : { duration: 0 }}
         />
         <motion.div
           className="absolute -bottom-24 -right-20 w-80 h-80 rounded-full bg-secondary/20 blur-3xl"
-          animate={shouldReduceMotion ? { x: 0, y: 0 } : { x: [0, -35, 0], y: [0, -20, 0] }}
-          transition={shouldReduceMotion ? { duration: 0 } : { duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+          animate={shouldAnimateHero ? { x: [0, -35, 0], y: [0, -20, 0] } : { x: 0, y: 0 }}
+          transition={shouldAnimateHero ? { duration: 12, repeat: Infinity, ease: 'easeInOut' } : { duration: 0 }}
         />
 
-        {showAmbientParticles && particles.map((p) => (
+        {showAmbientParticles && shouldAnimateHero && particles.map((p) => (
           <motion.div
             key={p.id}
             className="absolute w-2 h-2 rounded-full bg-accent/70"
