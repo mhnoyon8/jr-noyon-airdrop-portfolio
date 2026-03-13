@@ -99,7 +99,9 @@ export default function HomePage() {
   const [isTickerPaused, setIsTickerPaused] = useState(false);
   const [showAmbientParticles, setShowAmbientParticles] = useState(false);
   const [isPageVisible, setIsPageVisible] = useState(true);
-  const shouldAnimateHero = !shouldReduceMotion && isPageVisible;
+  const [prefersReducedData, setPrefersReducedData] = useState(false);
+  const shouldLimitMotion = shouldReduceMotion || prefersReducedData;
+  const shouldAnimateHero = !shouldLimitMotion && isPageVisible;
   const testimonialsRef = useRef<HTMLDivElement | null>(null);
   const isTestimonialsInView = useInView(testimonialsRef, { amount: 0.5 });
 
@@ -132,13 +134,13 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (shouldReduceMotion || isTestimonialPaused || !isTestimonialsInView || !isPageVisible) return;
+    if (shouldLimitMotion || isTestimonialPaused || !isTestimonialsInView || !isPageVisible) return;
 
     const timer = setInterval(() => {
       setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
     }, 3500);
     return () => clearInterval(timer);
-  }, [shouldReduceMotion, isTestimonialPaused, isTestimonialsInView, isPageVisible, testimonials.length]);
+  }, [shouldLimitMotion, isTestimonialPaused, isTestimonialsInView, isPageVisible, testimonials.length]);
 
   useEffect(() => {
     const onScroll = () => setShowBackToTop(window.scrollY > 640);
@@ -153,6 +155,20 @@ export default function HomePage() {
     update();
     mq.addEventListener('change', update);
     return () => mq.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
+    const connection = (navigator as Navigator & {
+      connection?: { saveData?: boolean; addEventListener?: (type: string, listener: () => void) => void; removeEventListener?: (type: string, listener: () => void) => void };
+    }).connection;
+
+    if (!connection) return;
+
+    const update = () => setPrefersReducedData(Boolean(connection.saveData));
+    update();
+
+    connection.addEventListener?.('change', update);
+    return () => connection.removeEventListener?.('change', update);
   }, []);
 
   useEffect(() => {
@@ -183,7 +199,7 @@ export default function HomePage() {
   }, [sectionNavItems]);
 
   const handleBackToTop = () => {
-    window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'auto' : 'smooth' });
+    window.scrollTo({ top: 0, behavior: shouldLimitMotion ? 'auto' : 'smooth' });
   };
 
   const handleContactSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -312,7 +328,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <motion.a href="#about" className="absolute bottom-6 left-1/2 -translate-x-1/2 text-textSecondary" animate={shouldReduceMotion ? { y: 0 } : { y: [0, 8, 0] }} transition={shouldReduceMotion ? { duration: 0 } : { repeat: Infinity, duration: 1.8 }}>
+        <motion.a href="#about" className="absolute bottom-6 left-1/2 -translate-x-1/2 text-textSecondary" animate={shouldLimitMotion ? { y: 0 } : { y: [0, 8, 0] }} transition={shouldLimitMotion ? { duration: 0 } : { repeat: Infinity, duration: 1.8 }}>
           <ArrowDown />
         </motion.a>
       </section>
@@ -323,8 +339,8 @@ export default function HomePage() {
           aria-label="Live activity highlights"
           tabIndex={0}
           className="whitespace-nowrap py-3 text-sm text-textSecondary [font-family:var(--font-mono)]"
-          animate={shouldReduceMotion || isTickerPaused ? { x: 0 } : { x: ['0%', '-50%'] }}
-          transition={shouldReduceMotion ? { duration: 0 } : { duration: 24, repeat: Infinity, ease: 'linear' }}
+          animate={shouldLimitMotion || isTickerPaused ? { x: 0 } : { x: ['0%', '-50%'] }}
+          transition={shouldLimitMotion ? { duration: 0 } : { duration: 24, repeat: Infinity, ease: 'linear' }}
           onMouseEnter={() => setIsTickerPaused(true)}
           onMouseLeave={() => setIsTickerPaused(false)}
           onFocus={() => setIsTickerPaused(true)}
@@ -393,7 +409,7 @@ export default function HomePage() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.015 }}
+              whileHover={shouldLimitMotion ? undefined : { y: -6, scale: 1.015 }}
               transition={{ type: 'spring', stiffness: 180, damping: 20 }}
               className="glass rounded-xl p-5 hover:shadow-glow transition-transform duration-300"
             >
