@@ -632,11 +632,33 @@ export default function HomePage() {
         </div>
       </section>
 
+      <motion.div
+        className="fixed inset-x-4 bottom-4 z-40 md:hidden"
+        initial={false}
+        animate={{ opacity: showBackToTop ? 1 : 0.96, y: showBackToTop ? 0 : 8 }}
+        transition={{ duration: 0.22 }}
+      >
+        <div className="glass rounded-2xl border border-white/15 p-2 flex items-center gap-2 shadow-lg">
+          <a
+            href="#portfolio"
+            className="flex-1 text-center px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80"
+          >
+            View Portfolio
+          </a>
+          <a
+            href="#contact"
+            className="flex-1 text-center px-3 py-2 rounded-xl bg-gradient-to-r from-primary to-secondary text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80"
+          >
+            Contact
+          </a>
+        </div>
+      </motion.div>
+
       <motion.button
         type="button"
         onClick={handleBackToTop}
         aria-label="Back to top"
-        className="fixed bottom-6 right-6 z-40 h-11 w-11 rounded-full border border-white/20 bg-background/80 backdrop-blur-md text-textPrimary shadow-lg hover:shadow-glow transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80"
+        className="fixed bottom-24 right-6 z-40 h-11 w-11 rounded-full border border-white/20 bg-background/80 backdrop-blur-md text-textPrimary shadow-lg hover:shadow-glow transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 md:bottom-6"
         initial={false}
         animate={{ opacity: showBackToTop ? 1 : 0, scale: showBackToTop ? 1 : 0.9, pointerEvents: showBackToTop ? 'auto' : 'none' }}
         transition={{ duration: 0.22 }}
