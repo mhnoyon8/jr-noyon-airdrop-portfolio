@@ -96,6 +96,7 @@ export default function HomePage() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [activeSection, setActiveSection] = useState('about');
   const [contactFeedback, setContactFeedback] = useState('');
+  const [showAmbientParticles, setShowAmbientParticles] = useState(false);
 
   const sectionNavItems = useMemo(
     () => [
@@ -130,6 +131,14 @@ export default function HomePage() {
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px) and (prefers-reduced-motion: no-preference)');
+    const update = () => setShowAmbientParticles(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
   }, []);
 
   useEffect(() => {
@@ -213,7 +222,7 @@ export default function HomePage() {
           transition={shouldReduceMotion ? { duration: 0 } : { duration: 12, repeat: Infinity, ease: 'easeInOut' }}
         />
 
-        {!shouldReduceMotion && particles.map((p) => (
+        {showAmbientParticles && particles.map((p) => (
           <motion.div
             key={p.id}
             className="absolute w-2 h-2 rounded-full bg-accent/70"
