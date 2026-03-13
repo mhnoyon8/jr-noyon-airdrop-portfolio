@@ -438,7 +438,10 @@ export default function HomePage() {
         <div
           className="max-w-3xl mx-auto"
           tabIndex={0}
+          role="region"
+          aria-roledescription="carousel"
           aria-label="Testimonials carousel"
+          aria-describedby="testimonial-status"
           onMouseEnter={() => setIsTestimonialPaused(true)}
           onMouseLeave={() => setIsTestimonialPaused(false)}
           onFocus={() => setIsTestimonialPaused(true)}
@@ -446,15 +449,24 @@ export default function HomePage() {
           onKeyDown={(e) => {
             if (e.key === 'ArrowLeft') goToPrevTestimonial();
             if (e.key === 'ArrowRight') goToNextTestimonial();
+            if (e.key === 'Home') setActiveTestimonial(0);
+            if (e.key === 'End') setActiveTestimonial(testimonials.length - 1);
           }}
         >
+          <p id="testimonial-status" className="sr-only" aria-live="polite">
+            Testimonial {activeTestimonial + 1} of {testimonials.length}. {isTestimonialPaused ? 'Autoplay paused.' : 'Autoplay running.'}
+          </p>
+
           <motion.div
             key={activeTestimonial}
+            id="testimonial-slide"
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${activeTestimonial + 1} of ${testimonials.length}`}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="glass rounded-2xl p-6 text-center"
-            aria-live="polite"
           >
             <p className="text-base md:text-lg text-textSecondary">{testimonials[activeTestimonial][0]}</p>
             <p className="mt-4 text-sm text-accent">— {testimonials[activeTestimonial][1]}</p>
@@ -465,6 +477,7 @@ export default function HomePage() {
               type="button"
               onClick={goToPrevTestimonial}
               aria-label="Previous testimonial"
+              aria-controls="testimonial-slide"
               className="h-9 w-9 inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 hover:bg-white/10 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -475,6 +488,7 @@ export default function HomePage() {
               onClick={() => setIsTestimonialPaused((prev) => !prev)}
               aria-label={isTestimonialPaused ? 'Resume autoplay' : 'Pause autoplay'}
               aria-pressed={isTestimonialPaused}
+              aria-controls="testimonial-slide"
               className="h-9 w-9 inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 hover:bg-white/10 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80"
             >
               {isTestimonialPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
@@ -484,6 +498,7 @@ export default function HomePage() {
               type="button"
               onClick={goToNextTestimonial}
               aria-label="Next testimonial"
+              aria-controls="testimonial-slide"
               className="h-9 w-9 inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 hover:bg-white/10 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80"
             >
               <ChevronRight className="w-4 h-4" />
@@ -496,7 +511,8 @@ export default function HomePage() {
                 key={i}
                 type="button"
                 aria-label={`Go to testimonial ${i + 1}`}
-                aria-pressed={activeTestimonial === i}
+                aria-current={activeTestimonial === i ? 'true' : undefined}
+                aria-controls="testimonial-slide"
                 onClick={() => setActiveTestimonial(i)}
                 className={`h-2.5 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 ${activeTestimonial === i ? 'w-8 bg-accent' : 'w-2.5 bg-white/25'}`}
               />
