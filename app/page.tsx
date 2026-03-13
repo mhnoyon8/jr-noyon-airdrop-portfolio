@@ -98,6 +98,8 @@ export default function HomePage() {
   const [contactFeedback, setContactFeedback] = useState('');
   const [showAmbientParticles, setShowAmbientParticles] = useState(false);
 
+  const deferredSectionClass = 'section-wrap py-20 scroll-mt-24 [content-visibility:auto] [contain-intrinsic-size:1px_760px]';
+
   const sectionNavItems = useMemo(
     () => [
       ['about', 'About'],
@@ -342,7 +344,7 @@ export default function HomePage() {
         </div>
       </nav>
 
-      <section id="about" className="section-wrap py-20 scroll-mt-24">
+      <section id="about" className={deferredSectionClass}>
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}>
             <h2 className="text-3xl font-bold [font-family:var(--font-space)]">Who Am I?</h2>
@@ -362,7 +364,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="portfolio" className="section-wrap py-20 scroll-mt-24">
+      <section id="portfolio" className={deferredSectionClass}>
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Track Record</h2>
         <div className="grid md:grid-cols-3 gap-4">
           {portfolio.map((p) => (
@@ -384,7 +386,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="hunts" className="section-wrap py-20 scroll-mt-24">
+      <section id="hunts" className={deferredSectionClass}>
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Active Hunts</h2>
         <div className="space-y-4">
           {activeHunts.map((h, idx) => (
@@ -405,7 +407,7 @@ export default function HomePage() {
         <p className="text-xs text-textSecondary mt-3">Last updated: just now</p>
       </section>
 
-      <section className="section-wrap py-20">
+      <section className="section-wrap py-20 [content-visibility:auto] [contain-intrinsic-size:1px_620px]">
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Strategies & Tools</h2>
         <div className="grid md:grid-cols-4 gap-4 mb-6">
           {[
@@ -421,7 +423,7 @@ export default function HomePage() {
         <p className="text-textSecondary text-sm">Tools: Dune, DeBank, DefiLlama, Discord alpha channels, Twitter/X monitoring, wallet segmentation.</p>
       </section>
 
-      <section id="services" className="section-wrap py-20 scroll-mt-24">
+      <section id="services" className={deferredSectionClass}>
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Services</h2>
         <div className="grid md:grid-cols-3 gap-4">
           {['Airdrop Hunting Consultation', 'Wallet Setup & Security', 'Strategy Planning'].map((s) => (
@@ -433,7 +435,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section-wrap py-20">
+      <section className="section-wrap py-20 [content-visibility:auto] [contain-intrinsic-size:1px_620px]">
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Blog & Insights</h2>
         <div className="grid md:grid-cols-3 gap-4">
           {articles.map((a) => (
@@ -442,7 +444,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section-wrap py-20">
+      <section className="section-wrap py-20 [content-visibility:auto] [contain-intrinsic-size:1px_620px]">
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Testimonials</h2>
         <div
           className="max-w-3xl mx-auto"
@@ -530,7 +532,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="contact" className="section-wrap py-20 scroll-mt-24">
+      <section id="contact" className={deferredSectionClass}>
         <div className="grid md:grid-cols-2 gap-6">
           <div className="glass rounded-2xl p-6">
             <h2 className="text-3xl font-bold [font-family:var(--font-space)]">Contact</h2>
