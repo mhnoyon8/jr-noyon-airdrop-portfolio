@@ -96,6 +96,7 @@ export default function HomePage() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [activeSection, setActiveSection] = useState('about');
   const [contactFeedback, setContactFeedback] = useState('');
+  const [isTickerPaused, setIsTickerPaused] = useState(false);
   const [showAmbientParticles, setShowAmbientParticles] = useState(false);
   const [isPageVisible, setIsPageVisible] = useState(true);
   const shouldAnimateHero = !shouldReduceMotion && isPageVisible;
@@ -318,12 +319,19 @@ export default function HomePage() {
 
       <section className="border-y border-white/10 bg-white/[0.03] overflow-hidden">
         <motion.div
+          role="region"
+          aria-label="Live activity highlights"
+          tabIndex={0}
           className="whitespace-nowrap py-3 text-sm text-textSecondary [font-family:var(--font-mono)]"
-          animate={shouldReduceMotion ? { x: 0 } : { x: ['0%', '-50%'] }}
+          animate={shouldReduceMotion || isTickerPaused ? { x: 0 } : { x: ['0%', '-50%'] }}
           transition={shouldReduceMotion ? { duration: 0 } : { duration: 24, repeat: Infinity, ease: 'linear' }}
+          onMouseEnter={() => setIsTickerPaused(true)}
+          onMouseLeave={() => setIsTickerPaused(false)}
+          onFocus={() => setIsTickerPaused(true)}
+          onBlur={() => setIsTickerPaused(false)}
         >
           {[...tickerItems, ...tickerItems].map((item, i) => (
-            <span key={`${item}-${i}`} className="mx-6 inline-block">
+            <span key={`${item}-${i}`} aria-hidden={i >= tickerItems.length} className="mx-6 inline-block">
               {item}
             </span>
           ))}
