@@ -97,6 +97,9 @@ export default function HomePage() {
   const [activeSection, setActiveSection] = useState('about');
   const [contactFeedback, setContactFeedback] = useState('');
   const [showAmbientParticles, setShowAmbientParticles] = useState(false);
+  const [isPageVisible, setIsPageVisible] = useState(true);
+  const testimonialsRef = useRef<HTMLDivElement | null>(null);
+  const isTestimonialsInView = useInView(testimonialsRef, { amount: 0.5 });
 
   const deferredSectionClass = 'section-wrap py-20 scroll-mt-24 [content-visibility:auto] [contain-intrinsic-size:1px_760px]';
 
@@ -120,13 +123,20 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    if (shouldReduceMotion || isTestimonialPaused) return;
+    const updateVisibility = () => setIsPageVisible(document.visibilityState === 'visible');
+    updateVisibility();
+    document.addEventListener('visibilitychange', updateVisibility);
+    return () => document.removeEventListener('visibilitychange', updateVisibility);
+  }, []);
+
+  useEffect(() => {
+    if (shouldReduceMotion || isTestimonialPaused || !isTestimonialsInView || !isPageVisible) return;
 
     const timer = setInterval(() => {
       setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
     }, 3500);
     return () => clearInterval(timer);
-  }, [shouldReduceMotion, isTestimonialPaused, testimonials.length]);
+  }, [shouldReduceMotion, isTestimonialPaused, isTestimonialsInView, isPageVisible, testimonials.length]);
 
   useEffect(() => {
     const onScroll = () => setShowBackToTop(window.scrollY > 640);
@@ -447,6 +457,7 @@ export default function HomePage() {
       <section className="section-wrap py-20 [content-visibility:auto] [contain-intrinsic-size:1px_620px]">
         <h2 className="text-3xl font-bold [font-family:var(--font-space)] mb-8">Testimonials</h2>
         <div
+          ref={testimonialsRef}
           className="max-w-3xl mx-auto"
           tabIndex={0}
           role="region"
